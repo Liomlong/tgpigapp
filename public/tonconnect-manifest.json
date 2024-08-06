@@ -1,6 +1,12 @@
 {
-    "name": "My TON App",
-    "description": "A simple TON domain sale app",
-    "url": "http://localhost:3000",
-    "iconUrl": "http://localhost:3000/icon.png"
+  "name": "My TON App",
+  "description": "A sample TON app",
+  "url": "https://www.pig.tg",
+  "icons": [
+    {
+      "src": "https://www.pig.tg/icon.png",
+      "sizes": "any"
+    }
+  ],
+  "bridge": "https://bridge.tonapi.io/bridge"
 }

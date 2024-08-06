@@ -17,7 +17,7 @@ const handlePurchase = (domainName) => {
     // 这里添加购买逻辑
 };
 
-const DomainList = ({ domains, onPurchase, isTelegramConnected, isTonConnected }) => (
+const DomainList = ({ domains, onPurchase, isTonConnected }) => (
     <Grid container spacing={2}>
         {domains.map(domain => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={domain.name}>
@@ -33,7 +33,7 @@ const DomainList = ({ domains, onPurchase, isTelegramConnected, isTonConnected }
                         <Button
                             size="small"
                             variant="outlined"
-                            disabled={domain.status === 'Sold' || !isTelegramConnected || !isTonConnected}
+                            disabled={domain.status === 'Sold' || !isTonConnected}
                             style={{ color: domain.status === 'Sold' ? 'gray' : 'inherit' }}
                             onClick={() => onPurchase(domain.name)}
                         >
@@ -78,7 +78,6 @@ function App() {
     const [sortOrder, setSortOrder] = useState('price-high-to-low');
     const [transactionOpen, setTransactionOpen] = useState(false);
     const [closeConfirmOpen, setCloseConfirmOpen] = useState(false);
-    const [isTelegramConnected, setIsTelegramConnected] = useState(false);
     const [isTonConnected, setIsTonConnected] = useState(false);
 
     const handleSortChange = (event) => {
@@ -104,14 +103,6 @@ function App() {
         // 执行关闭操作，例如 window.close();
     };
 
-    const handleError = (error) => {
-        console.error('TonConnect Error:', error);
-    };
-
-    const handleTelegramConnect = () => {
-        setIsTelegramConnected(true);
-    };
-
     const handleTonConnect = () => {
         setIsTonConnected(true);
     };
@@ -132,7 +123,7 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <TonConnectUIProvider manifestUrl="/tonconnect-manifest.json" onError={handleError}>
+            <TonConnectUIProvider manifestUrl="/tonconnect-manifest.json" onError={(error) => console.error('TonConnect Error:', error)}>
                 <CssBaseline />
                 <AppBar position="static">
                     <Toolbar>
@@ -141,7 +132,9 @@ function App() {
                             variant="contained"
                             startIcon={<TelegramIcon />}
                             style={{ backgroundColor: '#2A2A2A', color: 'white', marginRight: '10px' }}
-                            onClick={handleTelegramConnect}
+                            onClick={() => window.TelegramLoginWidget.login(() => {
+                                alert("Connected to Telegram");
+                            })}
                         >
                             Connect Telegram
                         </Button>
@@ -169,7 +162,7 @@ function App() {
                             <MenuItem value="time-left">Time left</MenuItem>
                         </Select>
                     </div>
-                    <DomainList domains={domains} onPurchase={handlePurchase} isTelegramConnected={isTelegramConnected} isTonConnected={isTonConnected} />
+                    <DomainList domains={domains} onPurchase={handlePurchase} isTonConnected={isTonConnected} />
                 </Container>
                 <TransactionStatus open={transactionOpen} onClose={handleTransactionClose} />
                 <CloseConfirmation open={closeConfirmOpen} onClose={() => setCloseConfirmOpen(false)} onConfirm={handleCloseConfirm} />
