@@ -1,0 +1,6 @@
+{
+    "name": "My TON App",
+    "description": "A simple TON domain sale app",
+    "url": "http://localhost:3000",
+    "iconUrl": "http://localhost:3000/icon.png"
+}
