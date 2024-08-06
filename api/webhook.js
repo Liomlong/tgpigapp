@@ -1,7 +1,6 @@
-// api/webhook.js
 const fetch = require('node-fetch');
 
-const botToken = "7247154710:AAGcYdYqeeBG4mvhgXVhYAvme-UkhjO_VCw";
+const botToken = "7247154710:AAGcYqeeBG4mvhgXVhYAvme-UkhjO_VCw";
 
 const sendMessage = async (chatId, text) => {
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
@@ -19,15 +18,17 @@ const sendMessage = async (chatId, text) => {
 };
 
 module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    res.status(405).send('Method Not Allowed');
+    return;
+  }
+
   const data = req.body;
+  console.log('Received data:', data);
   if (data.message) {
     const chatId = data.message.chat.id;
     const text = data.message.text;
     if (text === '/start') {
       await sendMessage(chatId, 'Welcome to PIG.TG Bot!');
     } else {
-      await sendMessage(chatId, `You said: ${text}`);
-    }
-  }
-  res.status(200).send('OK');
-};
+     
