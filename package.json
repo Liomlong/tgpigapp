@@ -4,13 +4,14 @@
   "homepage": "https://Liomlong.github.io/tgpigapp",
   "private": true,
   "dependencies": {
-    "@mui/material": "^5.4.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.4.0",
     "@tonconnect/ui-react": "^2.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.0"
+    "react-scripts": "^5.0.0",
+    "web-vitals": "^4.2.2"
   },
   "scripts": {
     "predeploy": "npm run build",
