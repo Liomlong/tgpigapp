@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
   }
 
   const data = req.body;
-  console.log('Received data:', data); // Debug log to verify data receipt
+  console.log('Received data:', data);
   if (data.message) {
     const chatId = data.message.chat.id;
     const text = data.message.text;
