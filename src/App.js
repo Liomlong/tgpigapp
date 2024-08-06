@@ -6,18 +6,24 @@ import theme from './theme';
 import { TonConnectUIProvider, TonConnectButton } from '@tonconnect/ui-react';
 
 const domains = [
-    { name: 'example.tg', status: 'Available', price: 40 },
-    { name: 'sample.tg', status: 'Available', price: 50 },
-    { name: 'test.tg', status: 'Available', price: 30 },
+    { name: 'act.tg', status: 'Available', price: 40 },
+    { name: 'add.tg', status: 'Sold', price: 50 },
+    { name: 'ape.tg', status: 'Sold', price: 60 },
+    { name: 'are.tg', status: 'Available', price: 70 },
+    { name: 'art.tg', status: 'Sold', price: 80 },
+    { name: 'arm.tg', status: 'Available', price: 90 },
     // 添加其他域名
 ];
+
+// 按首字母排序
+domains.sort((a, b) => a.name.localeCompare(b.name));
 
 const handlePurchase = (domainName) => {
     alert(`You have selected domain: ${domainName}`);
     // 这里添加购买逻辑
 };
 
-const DomainList = ({ domains, onPurchase, isTonConnected }) => (
+const DomainList = ({ domains, onPurchase }) => (
     <Grid container spacing={2}>
         {domains.map(domain => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={domain.name}>
@@ -33,7 +39,7 @@ const DomainList = ({ domains, onPurchase, isTonConnected }) => (
                         <Button
                             size="small"
                             variant="outlined"
-                            disabled={domain.status === 'Sold' || !isTonConnected}
+                            disabled={domain.status === 'Sold'}
                             style={{ color: domain.status === 'Sold' ? 'gray' : 'inherit' }}
                             onClick={() => onPurchase(domain.name)}
                         >
@@ -75,10 +81,9 @@ const CloseConfirmation = ({ open, onClose, onConfirm }) => (
 );
 
 function App() {
-    const [sortOrder, setSortOrder] = useState('price-high-to-low');
-    const [transactionOpen, setTransactionOpen] = useState(false);
-    const [closeConfirmOpen, setCloseConfirmOpen] = useState(false);
-    const [isTonConnected, setIsTonConnected] = useState(false);
+    const [sortOrder, setSortOrder] = React.useState('price-high-to-low');
+    const [transactionOpen, setTransactionOpen] = React.useState(false);
+    const [closeConfirmOpen, setCloseConfirmOpen] = React.useState(false);
 
     const handleSortChange = (event) => {
         setSortOrder(event.target.value);
@@ -103,8 +108,8 @@ function App() {
         // 执行关闭操作，例如 window.close();
     };
 
-    const handleTonConnect = () => {
-        setIsTonConnected(true);
+    const handleError = (error) => {
+        console.error('TonConnect Error:', error);
     };
 
     useEffect(() => {
@@ -123,7 +128,7 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <TonConnectUIProvider manifestUrl="/tonconnect-manifest.json" onError={(error) => console.error('TonConnect Error:', error)}>
+            <TonConnectUIProvider manifestUrl="/tonconnect-manifest.json" onError={handleError}>
                 <CssBaseline />
                 <AppBar position="static">
                     <Toolbar>
@@ -132,13 +137,11 @@ function App() {
                             variant="contained"
                             startIcon={<TelegramIcon />}
                             style={{ backgroundColor: '#2A2A2A', color: 'white', marginRight: '10px' }}
-                            onClick={() => window.TelegramLoginWidget.login(() => {
-                                alert("Connected to Telegram");
-                            })}
+                            onClick={() => alert('Connect Telegram')}
                         >
                             Connect Telegram
                         </Button>
-                        <TonConnectButton onClick={handleTonConnect} />
+                        <TonConnectButton />
                     </Toolbar>
                 </AppBar>
                 <Container maxWidth="lg" style={{ marginTop: '20px' }}>
@@ -162,7 +165,7 @@ function App() {
                             <MenuItem value="time-left">Time left</MenuItem>
                         </Select>
                     </div>
-                    <DomainList domains={domains} onPurchase={handlePurchase} isTonConnected={isTonConnected} />
+                    <DomainList domains={domains} onPurchase={handlePurchase} />
                 </Container>
                 <TransactionStatus open={transactionOpen} onClose={handleTransactionClose} />
                 <CloseConfirmation open={closeConfirmOpen} onClose={() => setCloseConfirmOpen(false)} onConfirm={handleCloseConfirm} />
