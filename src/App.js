@@ -1,48 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { TonConnectButton } from '@tonconnect/ui-react';
-import { Container, Typography, Button, Card, CardContent } from '@mui/material';
-import TelegramIcon from '@mui/icons-material/Telegram';
+import React, { useState, useEffect } from 'react';
+import { TonConnectButton, TonConnectUIProvider } from '@tonconnect/ui-react';
 import domains from './domains';
 
-const App = () => {
-    const [username, setUsername] = useState('');
+function App() {
+  const [username, setUsername] = useState('');
 
-    useEffect(() => {
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
-            const user = window.Telegram.WebApp.initDataUnsafe.user;
-            if (user) {
-                setUsername(user.username);
-            }
-        }
-    }, []);
+  useEffect(() => {
+    // 使用 Telegram Web Apps JavaScript API 读取用户名
+    const tg = window.Telegram.WebApp;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      setUsername(tg.initDataUnsafe.user.username || 'User');
+    }
+  }, []);
 
-    return (
-        <Container>
-            <Typography variant="h4" gutterBottom>
-                Welcome, {username ? username : 'User'}!
-            </Typography>
-            <TonConnectButton />
-            <Typography variant="h6" gutterBottom>
-                Domains for Sale
-            </Typography>
-            {domains.sort((a, b) => a.name.localeCompare(b.name)).map((domain, index) => (
-                <Card key={index} variant="outlined" style={{ margin: '16px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <CardContent>
-                        <Typography variant="h6">{domain.name}</Typography>
-                        <Typography variant="body2">{domain.status}</Typography>
-                    </CardContent>
-                    <Button
-                        variant="contained"
-                        color={domain.status === 'Sold' ? 'default' : 'primary'}
-                        disabled={domain.status === 'Sold'}
-                        style={{ marginRight: '16px' }}
-                    >
-                        {domain.status === 'Sold' ? 'Sold' : 'Buy'}
-                    </Button>
-                </Card>
+  return (
+    <TonConnectUIProvider manifestUrl="/tonconnect-manifest.json">
+      <div className="App">
+        <header className="App-header">
+          <button className="tg-login-button">
+            Log in as {username}
+          </button>
+          <TonConnectButton />
+        </header>
+        <main>
+          <h2>Available Domains</h2>
+          <ul>
+            {domains.map((domain) => (
+              <li key={domain.name}>
+                {domain.name} - {domain.price} TON
+                <button
+                  style={{ backgroundColor: domain.sold ? 'grey' : 'blue' }}
+                  disabled={domain.sold}
+                >
+                  {domain.sold ? 'SOLD' : 'BUY'}
+                </button>
+              </li>
             ))}
-        </Container>
-    );
-};
+          </ul>
+        </main>
+      </div>
+    </TonConnectUIProvider>
+  );
+}
 
 export default App;
