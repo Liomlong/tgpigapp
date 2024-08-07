@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/tgpigapp/static/css/main.e6c13ad2.css",
+    "main.js": "/tgpigapp/static/js/main.acb993d5.js",
+    "static/js/453.c72bf0f3.chunk.js": "/tgpigapp/static/js/453.c72bf0f3.chunk.js",
+    "index.html": "/tgpigapp/index.html",
+    "main.e6c13ad2.css.map": "/tgpigapp/static/css/main.e6c13ad2.css.map",
+    "main.acb993d5.js.map": "/tgpigapp/static/js/main.acb993d5.js.map",
+    "453.c72bf0f3.chunk.js.map": "/tgpigapp/static/js/453.c72bf0f3.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.acb993d5.js"
+  ]
+}
